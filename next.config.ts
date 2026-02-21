@@ -9,7 +9,8 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  reactStrictMode: false,
+  reactStrictMode: true,
+  trailingSlash: true,
   devIndicators: false,
 };
 

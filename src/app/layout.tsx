@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Ranjith V - AI & Data Science Engineer",
     description: "Portfolio showcasing AI/ML projects, data science solutions, and innovative engineering work",
-    url: "http://localhost:3000",
+    url: "https://ranjith.tech",
     siteName: "Ranjith V Portfolio",
     type: "website",
   },
