@@ -19,16 +19,16 @@ import { GlowingText } from '@/components/glowing-text'
 
 // Data Arrays - To be populated
 const skills = [
-  { name: 'Python', icon: Code2, level: 'Familiar', color: 'from-blue-500 to-yellow-500' },
-  { name: 'Java', icon: Code2, level: 'Basic', color: 'from-orange-500 to-red-500' },
-  { name: 'C', icon: Code2, level: 'Basic', color: 'from-purple-500 to-pink-500' },
-  { name: 'HTML & CSS', icon: Globe, level: 'Intermediate', color: 'from-orange-400 to-yellow-500' },
-  { name: 'Machine Learning', icon: Brain, level: 'Basics', color: 'from-green-500 to-emerald-500' },
-  { name: 'Power BI', icon: BarChart3, level: 'Intermediate', color: 'from-yellow-500 to-orange-500' },
-  { name: 'Figma', icon: Layers, level: 'Intermediate', color: 'from-pink-500 to-rose-500' },
-  { name: 'SQL', icon: Database, level: 'Intermediate', color: 'from-blue-500 to-orange-500' },
-  { name: 'Canva', icon: Layers, level: 'Intermediate', color: 'from-purple-600 to-orange-500' },
-  { name: 'Vibe Coding', icon: Sparkles, level: 'Intermediate', color: 'from-amber-500 to-fuchsia-500' },
+  { name: 'Python', icon: Code2, color: 'from-blue-500 to-yellow-500' },
+  { name: 'Java', icon: Code2, color: 'from-orange-500 to-red-500' },
+  { name: 'C', icon: Code2, color: 'from-purple-500 to-pink-500' },
+  { name: 'HTML & CSS', icon: Globe, color: 'from-orange-400 to-yellow-500' },
+  { name: 'Machine Learning', icon: Brain, color: 'from-green-500 to-emerald-500' },
+  { name: 'Power BI', icon: BarChart3, color: 'from-yellow-500 to-orange-500' },
+  { name: 'Figma', icon: Layers, color: 'from-pink-500 to-rose-500' },
+  { name: 'SQL', icon: Database, color: 'from-blue-500 to-orange-500' },
+  { name: 'Canva', icon: Layers, color: 'from-purple-600 to-orange-500' },
+  { name: 'Vibe Coding', icon: Sparkles, color: 'from-amber-500 to-fuchsia-500' },
 ]
 const tools = [
   'Power BI', 'Figma', 'Excel', 'Canva', 'Blogger & Spreadsheets', 'Git', 'TensorFlow', 'Keras'
@@ -305,7 +305,7 @@ export default function Portfolio() {
                 <MagneticButton asChild size="lg" variant="outline" className="border-2 border-orange-300 dark:border-orange-700 hover:bg-orange-50 dark:hover:bg-orange-950/20 px-6 sm:px-8">
                   <a href="/upload/Final%20resume.pdf" download="Final_resume.pdf" target="_blank">
                     <Download className="mr-2 h-5 w-5" />
-                    <span className="hidden sm:inline">Download CV</span>
+                    Download CV
                   </a>
                 </MagneticButton>
               </motion.div>
@@ -464,14 +464,11 @@ export default function Portfolio() {
                   whileHover={{ y: -4, boxShadow: '0 8px 25px rgba(99, 102, 241, 0.15)' }}
                   className="cursor-pointer"
                 >
-                  <div className="p-3 md:p-4 rounded-xl border border-border/50 bg-background/80 backdrop-blur-sm hover:border-orange-300/60 dark:hover:border-orange-700/60 transition-all duration-200 flex flex-col items-center gap-2 text-center select-none">
-                    <div className={`p-2.5 rounded-xl bg-gradient-to-br ${skill.color} shadow-md`}>
-                      <skill.icon className="h-5 w-5 text-white" />
+                  <div className="p-4 rounded-xl border border-border/50 bg-background/80 backdrop-blur-sm hover:border-orange-300/60 dark:hover:border-orange-700/60 transition-all duration-200 flex flex-col items-center justify-center gap-3 text-center select-none h-full min-h-[120px]">
+                    <div className={`p-3 rounded-xl bg-gradient-to-br ${skill.color} shadow-md`}>
+                      <skill.icon className="h-6 w-6 text-white" />
                     </div>
                     <span className="font-semibold text-sm">{skill.name}</span>
-                    <Badge className={`bg-gradient-to-r ${skill.color} text-white border-0 text-[10px] px-2 py-0.5`}>
-                      {skill.level}
-                    </Badge>
                   </div>
                 </motion.div>
               ))}
