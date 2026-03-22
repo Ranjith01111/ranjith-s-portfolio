@@ -198,7 +198,7 @@ export default function Portfolio() {
               </a>
             </MagneticButton>
             <MagneticButton asChild variant="outline" size="sm" className="border-orange-300 dark:border-orange-700 hover:bg-orange-50 dark:hover:bg-orange-950/20">
-              <a href="/upload/Ranjith%20resume1.pdf" target="_blank" rel="noopener noreferrer">
+              <a href="/upload/Resume%20of%20Ranjith-1.pdf" target="_blank" rel="noopener noreferrer">
                 <Download className="h-4 w-4 sm:mr-2" />
                 <span className="hidden sm:inline">Resume</span>
               </a>
@@ -303,7 +303,7 @@ export default function Portfolio() {
                   </a>
                 </MagneticButton>
                 <MagneticButton asChild size="lg" variant="outline" className="border-2 border-orange-300 dark:border-orange-700 hover:bg-orange-50 dark:hover:bg-orange-950/20 px-6 sm:px-8">
-                  <a href="/upload/Ranjith%20resume1.pdf" download="Ranjith_resume1.pdf" target="_blank">
+                  <a href="/upload/Resume%20of%20Ranjith-1.pdf" download="Resume_of_Ranjith-1.pdf" target="_blank">
                     <Download className="mr-2 h-5 w-5" />
                     Download CV
                   </a>
