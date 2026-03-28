@@ -1,14 +1,17 @@
 'use client'
 
+import { useState, useCallback } from 'react'
+
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import {
   Mail, Phone, MapPin, Linkedin, Download, Github, ExternalLink, Brain, Rocket,
   Database, Code2, BarChart3, Layers, GraduationCap, Briefcase, Cpu, Zap,
   FileText, ChevronRight, Globe, ArrowRight, Sparkles, Terminal, Trophy,
-  Target, Flame, Hexagon
+  Target, Flame, Hexagon, User
 } from 'lucide-react'
 
 import { SubtleBackground } from '@/components/subtle-background'
@@ -16,6 +19,8 @@ import { TiltCard } from '@/components/tilt-card'
 import { MagneticButton } from '@/components/magnetic-button'
 import { ScrollProgress } from '@/components/scroll-progress'
 import { GlowingText } from '@/components/glowing-text'
+import { ThemeToggle } from '@/components/theme-toggle'
+import { IntroAnimation } from '@/components/intro-animation'
 
 // Data Arrays - To be populated
 const skills = [
@@ -65,28 +70,11 @@ const education = [
     field: 'Artificial Intelligence And Data Science',
     institution: 'Rathinam Technical Campus, Coimbatore',
     period: '2023 - 2027',
-    details: 'Anna University Affiliated • 9.19 GPA/CGPA',
+    details: 'Anna University Affiliated • 9.0 GPA/CGPA',
     icon: '🎓'
   }
 ]
 const projects = [
-  {
-    title: 'AI Video Generator',
-    role: 'For Education Content',
-    subtitle: 'Text to Video Converter',
-    description: 'Automates the creation of educational videos from text documents using AI. Features include LLM-powered scene generation, Manim animations, voice synchronization, and automated video rendering with error handling and retry mechanisms.',
-    icon: Video,
-    tech: ['Python', 'OpenAI API', 'Manim', 'FFmpeg', 'LaTeX', 'Gradio'],
-    features: [
-      'LLM-based Manim code generation',
-      'Voice synchronization with animations',
-      'Real-time video processing pipeline',
-      'Support for multiple deployment strategies'
-    ],
-    deployment: ['Hugging Face Spaces', 'Render/Railway', 'YouTube Automation API'],
-    gradient: 'from-purple-500 to-pink-500',
-    featured: true
-  },
   {
     title: 'AETHER',
     role: 'Lead AI & Data Science Engineer',
@@ -103,15 +91,37 @@ const projects = [
     ],
     domain: 'Aerospace / Predictive Maintenance / IoT',
     gradient: 'from-orange-500 to-red-500',
-    featured: true
+    featured: true,
+    liveDemo: 'https://github.com/Ranjith01111/aether-system'
   },
   {
-    title: 'Smart Tonometer',
-    role: 'IoT Project',
-    description: 'Built a Raspberry Pi-based tonometer with a force-sensitive sensor for accurate IOP measurement, featuring a real-time dashboard for patient data visualization.',
-    icon: Cpu,
-    tech: ['Python', 'Raspberry Pi', 'IoT', 'Sensors'],
-    gradient: 'from-yellow-500 to-blue-500'
+    title: 'CRUD Website',
+    role: 'Full Stack Web Project',
+    subtitle: 'Ticket Booking Web Application',
+    description: 'A full-stack ticket booking web app built with React, TypeScript, and Firebase. Features event discovery, ticket management (create, edit, cancel, delete), QR code e-passes, nearby theater finder, built-in chat support, and secure Firebase Authentication.',
+    icon: Globe,
+    tech: ['React', 'TypeScript', 'Firebase', 'Vite', 'Firestore'],
+    features: [
+      'Ticket Management — create, edit, cancel, delete',
+      'Live event recommendations in Coimbatore',
+      'QR code e-pass for each booking',
+      'Nearby theater finder',
+      'Built-in chat support assistant',
+      'Secure Firebase Authentication'
+    ],
+    domain: 'Full Stack / Web / Cloud',
+    gradient: 'from-indigo-500 to-blue-500',
+    featured: true,
+    liveDemo: 'https://github.com/Ranjith01111/CRUD-Website'
+  },
+  {
+    title: 'AI Video Generator',
+    role: 'For Education Content',
+    description: 'Automates the creation of educational videos from text documents using AI. Features include LLM-powered scene generation, Manim animations, voice synchronization, and automated video rendering with error handling and retry mechanisms.',
+    icon: Video,
+    tech: ['Python', 'OpenAI API', 'Manim', 'FFmpeg', 'LaTeX', 'Gradio'],
+    gradient: 'from-purple-500 to-pink-500',
+    liveDemo: 'https://github.com/Ranjith01111/Level-1-Text-to-video-AI-animation_Project'
   },
   {
     title: 'Intelligence Document Summarizer',
@@ -119,7 +129,8 @@ const projects = [
     description: 'Developed a Python tool using NLTK and Sumy to generate concise document summaries, offering practical NLP experience and scalable potential.',
     icon: FileText,
     tech: ['Python', 'NLTK', 'Sumy', 'NLP'],
-    gradient: 'from-green-500 to-teal-500'
+    gradient: 'from-green-500 to-teal-500',
+    liveDemo: 'https://github.com/Ranjith01111/Intelligence-Document-Summarizer'
   },
   {
     title: 'Mini AI Voice Agent',
@@ -127,7 +138,8 @@ const projects = [
     description: 'Created a functional AI voice agent with Python and LiveKit, providing an interactive beginner-friendly introduction to real-time AI applications.',
     icon: Zap,
     tech: ['Python', 'LiveKit', 'AI/ML', 'Real-time Communication'],
-    gradient: 'from-yellow-500 to-orange-500'
+    gradient: 'from-yellow-500 to-orange-500',
+    liveDemo: 'https://github.com/Ranjith01111/Mini-AI-voice-Agent'
   }
 ]
 
@@ -151,59 +163,75 @@ function Video({ size = 24 }: { size?: number }) {
 }
 
 export default function Portfolio() {
+  const [introComplete, setIntroComplete] = useState(false)
+  const handleIntroComplete = useCallback(() => setIntroComplete(true), [])
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-white via-orange-50/5 to-white dark:from-[#1a1008] dark:via-[#1a1410] dark:to-[#1a1008] overflow-x-hidden">
+
+      {/* Intro splash — plays every page load, overlays everything */}
+      <IntroAnimation onComplete={handleIntroComplete} />
 
       <ScrollProgress />
       <SubtleBackground />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-40 bg-background/70 backdrop-blur-2xl border-b border-border/40">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="relative"
-          >
-            <div className="text-3xl font-black bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-500 dark:from-orange-500 dark:via-amber-500 dark:to-yellow-400 bg-clip-text text-transparent relative z-10">
-              RV
-            </div>
+        <div className="container mx-auto px-4 py-4 flex items-center">
+          {/* Left — Logo */}
+          <div className="flex-1">
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-orange-400 to-amber-400 blur-2xl opacity-30"
-              animate={{
-                opacity: [0.2, 0.4, 0.2]
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: 'easeInOut'
-              }}
-            />
-          </motion.div>
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="relative inline-block"
+            >
+              <div className="text-3xl font-black bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-500 dark:from-orange-500 dark:via-amber-500 dark:to-yellow-400 bg-clip-text text-transparent relative z-10">
+                RV
+              </div>
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-orange-400 to-amber-400 blur-2xl opacity-30"
+                animate={{ opacity: [0.2, 0.4, 0.2] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              />
+            </motion.div>
+          </div>
+
+          {/* Center — Theme Toggle */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex gap-3"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
           >
-            <MagneticButton asChild variant="ghost" size="sm" className="hover:bg-orange-50 dark:hover:bg-orange-950/20">
-              <a href="https://www.linkedin.com/in/ranjithv1111" target="_blank" rel="noopener noreferrer">
-                <Linkedin className="h-4 w-4 sm:mr-2" />
-                <span className="hidden sm:inline">LinkedIn</span>
-              </a>
-            </MagneticButton>
-            <MagneticButton asChild variant="ghost" size="sm" className="hover:bg-orange-50 dark:hover:bg-orange-950/20">
-              <a href="https://github.com/Ranjith01111" target="_blank" rel="noopener noreferrer">
-                <Github className="h-4 w-4 sm:mr-2" />
-                <span className="hidden sm:inline">GitHub</span>
-              </a>
-            </MagneticButton>
-            <MagneticButton asChild variant="outline" size="sm" className="border-orange-300 dark:border-orange-700 hover:bg-orange-50 dark:hover:bg-orange-950/20">
-              <a href="/upload/Resume%20of%20Ranjith-1.pdf" target="_blank" rel="noopener noreferrer">
-                <Download className="h-4 w-4 sm:mr-2" />
-                <span className="hidden sm:inline">Resume</span>
-              </a>
-            </MagneticButton>
+            <ThemeToggle />
           </motion.div>
+
+          {/* Right — Nav Links */}
+          <div className="flex-1 flex justify-end">
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex gap-3"
+            >
+              <MagneticButton asChild variant="ghost" size="sm" className="hover:bg-orange-50 dark:hover:bg-orange-950/20">
+                <a href="https://www.linkedin.com/in/ranjithv1111" target="_blank" rel="noopener noreferrer">
+                  <Linkedin className="h-4 w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">LinkedIn</span>
+                </a>
+              </MagneticButton>
+              <MagneticButton asChild variant="ghost" size="sm" className="hover:bg-orange-50 dark:hover:bg-orange-950/20">
+                <a href="https://github.com/Ranjith01111" target="_blank" rel="noopener noreferrer">
+                  <Github className="h-4 w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">GitHub</span>
+                </a>
+              </MagneticButton>
+              <MagneticButton asChild variant="ghost" size="sm" className="hover:bg-orange-50 dark:hover:bg-orange-950/20">
+                <a href="#about-me">
+                  <User className="h-4 w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">About Me</span>
+                </a>
+              </MagneticButton>
+            </motion.div>
+          </div>
         </div>
       </nav>
 
@@ -296,18 +324,21 @@ export default function Portfolio() {
                 transition={{ delay: 0.7, duration: 0.6 }}
                 className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start mt-8"
               >
-                <MagneticButton asChild size="lg" className="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white border-0 shadow-lg shadow-orange-500/25 px-6 sm:px-8">
-                  <a href="mailto:ranjithvasu499@gmail.com">
-                    <Mail className="mr-2 h-5 w-5" />
-                    Get In Touch
+                <a
+                  href="https://mail.google.com/mail/?view=cm&to=ranjithvasu499@gmail.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-all text-white shadow-lg shadow-orange-500/25 px-6 sm:px-8 h-11 text-base bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 cursor-pointer"
+                >
+                  <Mail className="mr-2 h-5 w-5" />
+                  Get In Touch
+                </a>
+                <Button asChild size="lg" variant="outline" className="border-2 border-orange-300 dark:border-orange-700 hover:bg-orange-50 dark:hover:bg-orange-950/20 px-6 sm:px-8">
+                  <a href="/upload/Resume%20of%20Ranjith-1.pdf" target="_blank" rel="noopener noreferrer">
+                    <FileText className="mr-2 h-5 w-5" />
+                    View Resume
                   </a>
-                </MagneticButton>
-                <MagneticButton asChild size="lg" variant="outline" className="border-2 border-orange-300 dark:border-orange-700 hover:bg-orange-50 dark:hover:bg-orange-950/20 px-6 sm:px-8">
-                  <a href="/upload/Resume%20of%20Ranjith-1.pdf" download="Resume_of_Ranjith-1.pdf" target="_blank">
-                    <Download className="mr-2 h-5 w-5" />
-                    Download CV
-                  </a>
-                </MagneticButton>
+                </Button>
               </motion.div>
 
               <motion.div
@@ -685,6 +716,20 @@ export default function Portfolio() {
                           </div>
                         </div>
                       )}
+
+                      {project.liveDemo && (
+                        <div className="mt-4">
+                          <a
+                            href={project.liveDemo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white bg-gradient-to-r ${project.gradient} shadow-md hover:opacity-90 hover:shadow-lg transition-all duration-200`}
+                          >
+                            <Github className="h-4 w-4" />
+                            GitHub Repo
+                          </a>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </Card>
@@ -740,6 +785,20 @@ export default function Portfolio() {
                           </Badge>
                         ))}
                       </div>
+
+                      {project.liveDemo && (
+                        <div className="mt-4">
+                          <a
+                            href={project.liveDemo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white bg-gradient-to-r ${project.gradient} shadow-md hover:opacity-90 hover:shadow-lg transition-all duration-200`}
+                          >
+                            <Github className="h-4 w-4" />
+                            GitHub Repo
+                          </a>
+                        </div>
+                      )}
                     </div>
                   </Card>
                 </motion.div>
@@ -977,6 +1036,126 @@ export default function Portfolio() {
 
       <Separator className="bg-gradient-to-r from-transparent via-orange-300 dark:via-orange-700 to-transparent" />
 
+      {/* About Me Section */}
+      <section id="about-me" className="py-16 md:py-24 lg:py-32 px-4 relative overflow-hidden">
+        {/* Ambient glow */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-500/[0.04] rounded-full blur-[120px]" />
+          <div className="absolute top-1/4 right-1/4 w-[300px] h-[300px] bg-orange-500/[0.03] rounded-full blur-[80px]" />
+        </div>
+
+        <div className="container mx-auto max-w-5xl relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-10 md:mb-16"
+          >
+            <Badge className="bg-gradient-to-r from-orange-500/20 to-amber-500/20 text-orange-600 dark:text-orange-400 border-orange-300 dark:border-orange-700 mb-4">
+              <User className="w-3.5 h-3.5 mr-1.5" />
+              Who I Am
+            </Badge>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black mb-4 bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-500 dark:from-orange-500 dark:via-amber-500 dark:to-yellow-400 bg-clip-text text-transparent">
+              About Me
+            </h2>
+            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+              Driven by curiosity, shaped by discipline
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-2 gap-6 md:gap-8">
+            {/* Card 1 - Mindset */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <Card className="h-full border border-border/50 bg-background/60 backdrop-blur-sm overflow-hidden hover:shadow-xl hover:border-orange-300/60 dark:hover:border-orange-700/60 transition-all duration-300">
+                <div className="h-0.5 w-full bg-gradient-to-r from-orange-500 to-amber-500" />
+                <CardContent className="p-6 md:p-8">
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="p-2.5 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 shadow-md">
+                      <Target className="h-5 w-5 text-white" />
+                    </div>
+                    <h3 className="font-bold text-lg md:text-xl">Mindset &amp; Discipline</h3>
+                  </div>
+                  <p className="text-muted-foreground leading-relaxed text-sm md:text-base mb-5">
+                    I am a self-driven and disciplined individual focused on continuous growth and improvement.
+                    I stay goal-oriented, adapt quickly to new situations, and maintain consistency even in
+                    challenging environments. I excel at thinking clearly, staying calm under pressure, and
+                    approaching problems with a practical mindset.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {['Goal-Oriented', 'Disciplined', 'Calm Under Pressure', 'Adaptable', 'Practical'].map((trait) => (
+                      <Badge key={trait} className="bg-gradient-to-r from-orange-500/10 to-amber-500/10 text-orange-600 dark:text-orange-400 border-orange-300/50 dark:border-orange-700/50 text-xs">
+                        {trait}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Card 2 - Curiosity */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+            >
+              <Card className="h-full border border-border/50 bg-background/60 backdrop-blur-sm overflow-hidden hover:shadow-xl hover:border-amber-300/60 dark:hover:border-amber-700/60 transition-all duration-300">
+                <div className="h-0.5 w-full bg-gradient-to-r from-amber-500 to-yellow-500" />
+                <CardContent className="p-6 md:p-8">
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="p-2.5 rounded-xl bg-gradient-to-br from-amber-500 to-yellow-500 shadow-md">
+                      <Sparkles className="h-5 w-5 text-white" />
+                    </div>
+                    <h3 className="font-bold text-lg md:text-xl">Curiosity &amp; Growth</h3>
+                  </div>
+                  <p className="text-muted-foreground leading-relaxed text-sm md:text-base mb-5">
+                    I have a strong interest in reading technology and science news, which keeps me curious
+                    and aware of evolving trends. I enjoy exploring new ideas, understanding innovations, and
+                    gaining diverse perspectives. I am passionate about self-development and continuously work
+                    on improving my mindset, communication, and overall personality.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {['Tech Enthusiast', 'Lifelong Learner', 'Self-Motivated', 'Curious', 'Growth-Focused'].map((trait) => (
+                      <Badge key={trait} className="bg-gradient-to-r from-amber-500/10 to-yellow-500/10 text-amber-600 dark:text-amber-400 border-amber-300/50 dark:border-amber-700/50 text-xs">
+                        {trait}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+
+          {/* Highlight Quote Strip */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mt-8 md:mt-10"
+          >
+            <div className="relative p-6 md:p-8 rounded-2xl bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-yellow-500/10 border border-orange-300/30 dark:border-orange-700/30 text-center">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg">
+                  <Flame className="h-4 w-4 text-white" />
+                </div>
+              </div>
+              <p className="text-base md:text-lg font-medium text-foreground/80 italic leading-relaxed max-w-3xl mx-auto">
+                &ldquo;Passionate about self-development and continuously working on improving mindset, communication, and overall personality.&rdquo;
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <Separator className="bg-gradient-to-r from-transparent via-orange-300 dark:via-orange-700 to-transparent" />
+
       {/* Contact Section */}
       <section className="py-16 md:py-24 lg:py-32 px-4 relative">
         <div className="container mx-auto max-w-4xl text-center">
@@ -999,24 +1178,27 @@ export default function Portfolio() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 md:mb-12">
-              <MagneticButton asChild size="lg" className="bg-gradient-to-r from-orange-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white border-0 shadow-xl shadow-orange-500/30 px-6 sm:px-10 text-base md:text-lg">
-                <a href="mailto:ranjithvasu499@gmail.com">
-                  <Mail className="mr-2 h-5 w-5" />
-                  Email Me
-                </a>
-              </MagneticButton>
-              <MagneticButton asChild size="lg" variant="outline" className="border-2 border-orange-300 dark:border-orange-700 hover:bg-orange-50 dark:hover:bg-orange-950/20 px-6 sm:px-10 text-base md:text-lg">
+              <a
+                href="https://mail.google.com/mail/?view=cm&to=ranjithvasu499@gmail.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-all text-white shadow-xl shadow-orange-500/30 px-6 sm:px-10 h-11 text-base md:text-lg bg-gradient-to-r from-orange-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 cursor-pointer"
+              >
+                <Mail className="mr-2 h-5 w-5" />
+                Email Me
+              </a>
+              <Button asChild size="lg" variant="outline" className="border-2 border-orange-300 dark:border-orange-700 hover:bg-orange-50 dark:hover:bg-orange-950/20 px-6 sm:px-10 text-base md:text-lg">
                 <a href="https://www.linkedin.com/in/ranjith-v-b368952b7" target="_blank" rel="noopener noreferrer">
                   <Linkedin className="mr-2 h-5 w-5" />
                   LinkedIn
                 </a>
-              </MagneticButton>
-              <MagneticButton asChild size="lg" variant="outline" className="border-2 border-orange-300 dark:border-orange-700 hover:bg-orange-50 dark:hover:bg-orange-950/20 px-6 sm:px-10 text-base md:text-lg">
+              </Button>
+              <Button asChild size="lg" variant="outline" className="border-2 border-orange-300 dark:border-orange-700 hover:bg-orange-50 dark:hover:bg-orange-950/20 px-6 sm:px-10 text-base md:text-lg">
                 <a href="https://github.com/Ranjith01111" target="_blank" rel="noopener noreferrer">
                   <Github className="mr-2 h-5 w-5" />
                   GitHub
                 </a>
-              </MagneticButton>
+              </Button>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 text-muted-foreground mb-10 md:mb-16">
@@ -1082,8 +1264,8 @@ export default function Portfolio() {
                   </a>
                 </MagneticButton>
                 <MagneticButton asChild variant="ghost" size="sm" className="hover:bg-orange-50 dark:hover:bg-orange-950/20">
-                  <a href="/upload/Ranjith%20resume1.pdf" target="_blank" rel="noopener noreferrer">
-                    <Download className="h-5 w-5" />
+                  <a href="/upload/Resume%20of%20Ranjith-1.pdf" target="_blank" rel="noopener noreferrer" title="View Resume">
+                    <FileText className="h-5 w-5" />
                   </a>
                 </MagneticButton>
               </div>
