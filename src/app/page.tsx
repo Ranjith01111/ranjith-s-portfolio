@@ -11,7 +11,7 @@ import {
   Mail, Phone, MapPin, Linkedin, Download, Github, ExternalLink, Brain, Rocket,
   Database, Code2, BarChart3, Layers, GraduationCap, Briefcase, Cpu, Zap,
   FileText, ChevronRight, Globe, ArrowRight, Sparkles, Terminal, Trophy,
-  Target, Flame, Hexagon, User
+  Target, Flame, Hexagon, User, Award, BadgeCheck
 } from 'lucide-react'
 
 import { SubtleBackground } from '@/components/subtle-background'
@@ -140,6 +140,50 @@ const projects = [
     tech: ['Python', 'LiveKit', 'AI/ML', 'Real-time Communication'],
     gradient: 'from-yellow-500 to-orange-500',
     liveDemo: 'https://github.com/Ranjith01111/Mini-AI-voice-Agent'
+  }
+]
+const certifications = [
+  {
+    title: 'Prompting Essentials',
+    issuer: 'Google',
+    platform: 'Coursera',
+    date: '2025',
+    credentialId: 'Google · Coursera',
+    description: 'Mastered effective prompt engineering techniques for AI language models, covering prompt design, optimization strategies, and real-world AI application workflows.',
+    skills: ['Prompt Engineering', 'Generative AI', 'LLMs', 'AI Workflows'],
+    gradient: 'from-blue-500 to-cyan-500',
+    icon: '🧠',
+    verifyUrl: 'https://coursera.org/verify/specialization/LMWZSSLZ8XGS',
+    pdfUrl: '/upload/google-prompting-essentials.pdf',
+    color: 'blue'
+  },
+  {
+    title: 'Introduction to Vector Search',
+    issuer: 'MongoDB',
+    platform: 'MongoDB University',
+    date: '2025',
+    credentialId: 'MongoDB University',
+    description: 'Completed hands-on training in MongoDB Atlas Vector Search, learning to build semantic search systems, work with embeddings, and create AI-powered search applications.',
+    skills: ['Vector Search', 'MongoDB Atlas', 'Embeddings', 'Semantic Search'],
+    gradient: 'from-green-500 to-emerald-500',
+    icon: '🔍',
+    verifyUrl: null,
+    pdfUrl: '/upload/mongodb-vector-search.pdf',
+    color: 'green'
+  },
+  {
+    title: 'Introduction to RAG',
+    issuer: 'MongoDB',
+    platform: 'MongoDB University',
+    date: '2025',
+    credentialId: 'MongoDB University',
+    description: 'Learned to build Retrieval-Augmented Generation (RAG) pipelines using MongoDB Atlas, combining vector search with LLMs to deliver grounded, context-aware AI responses.',
+    skills: ['RAG Pipeline', 'MongoDB Atlas', 'LLM Integration', 'AI Applications'],
+    gradient: 'from-violet-500 to-purple-500',
+    icon: '🤖',
+    verifyUrl: 'https://www.credly.com/badges/e5eec1f6-f97c-4ab5-b262-3b0a3ff7c891',
+    pdfUrl: '/upload/mongodb-rag.pdf',
+    color: 'violet'
   }
 ]
 
@@ -805,6 +849,181 @@ export default function Portfolio() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      <Separator className="bg-gradient-to-r from-transparent via-orange-300 dark:via-orange-700 to-transparent" />
+
+      {/* ── Certifications Section ── */}
+      <section className="py-16 md:py-24 lg:py-32 px-4 relative overflow-hidden">
+        {/* Ambient background glow */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-blue-500/[0.04] rounded-full blur-[120px]" />
+          <div className="absolute bottom-1/3 right-1/4 w-[350px] h-[350px] bg-violet-500/[0.04] rounded-full blur-[100px]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-emerald-500/[0.03] rounded-full blur-[120px]" />
+        </div>
+
+        <div className="container mx-auto max-w-6xl relative z-10">
+          {/* Section header */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-10 md:mb-16"
+          >
+            <Badge className="bg-gradient-to-r from-blue-500/20 to-violet-500/20 text-blue-600 dark:text-blue-400 border-blue-300 dark:border-blue-700 mb-4">
+              <Award className="w-3.5 h-3.5 mr-1.5" />
+              Verified Credentials
+            </Badge>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black mb-4 bg-gradient-to-r from-blue-600 via-violet-600 to-purple-500 dark:from-blue-400 dark:via-violet-400 dark:to-purple-400 bg-clip-text text-transparent">
+              Certifications
+            </h2>
+            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+              Industry-recognized credentials validating expertise in AI, cloud, and data technologies
+            </p>
+          </motion.div>
+
+          {/* Certification Cards Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+            {certifications.map((cert, index) => (
+              <motion.div
+                key={cert.title}
+                initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ delay: index * 0.12, duration: 0.55, ease: 'easeOut' }}
+                whileHover={{ y: -6 }}
+                className="group cursor-default"
+              >
+                <div className="relative h-full rounded-2xl border border-border/40 bg-background/70 backdrop-blur-md overflow-hidden transition-all duration-300 group-hover:border-blue-300/50 dark:group-hover:border-blue-700/50 group-hover:shadow-2xl"
+                  style={{ boxShadow: '0 4px 30px rgba(99,102,241,0.06)' }}
+                >
+                  {/* Top gradient accent bar */}
+                  <div className={`h-1 w-full bg-gradient-to-r ${cert.gradient}`} />
+
+                  {/* Shimmer overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/[0.03] to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+                  {/* Glow blob behind card */}
+                  <motion.div
+                    className={`absolute -top-8 -right-8 w-32 h-32 bg-gradient-to-br ${cert.gradient} opacity-10 rounded-full blur-2xl`}
+                    animate={{ scale: [1, 1.15, 1], opacity: [0.08, 0.15, 0.08] }}
+                    transition={{ duration: 4 + index, repeat: Infinity, ease: 'easeInOut' }}
+                  />
+
+                  <div className="relative p-6 md:p-7 flex flex-col h-full">
+                    {/* Header row — icon + issuer badge */}
+                    <div className="flex items-start justify-between mb-4">
+                      <motion.div
+                        whileHover={{ rotate: 12, scale: 1.1 }}
+                        transition={{ type: 'spring', stiffness: 300 }}
+                        className={`w-12 h-12 rounded-xl bg-gradient-to-br ${cert.gradient} shadow-lg flex items-center justify-center text-2xl flex-shrink-0`}
+                      >
+                        {cert.icon}
+                      </motion.div>
+
+                      <div className="flex flex-col items-end gap-1">
+                        <Badge className={`bg-gradient-to-r ${cert.gradient} text-white border-0 text-xs px-2.5 py-1`}>
+                          <BadgeCheck className="w-3 h-3 mr-1" />
+                          Verified
+                        </Badge>
+                        <span className="text-xs text-muted-foreground">{cert.date}</span>
+                      </div>
+                    </div>
+
+                    {/* Title & Issuer */}
+                    <h3 className="text-lg md:text-xl font-bold mb-1 leading-tight">{cert.title}</h3>
+                    <div className="flex items-center gap-1.5 mb-3">
+                      <span className={`text-sm font-semibold ${
+                        cert.color === 'blue' ? 'text-blue-600 dark:text-blue-400'
+                        : cert.color === 'green' ? 'text-emerald-600 dark:text-emerald-400'
+                        : 'text-violet-600 dark:text-violet-400'
+                      }`}>
+                        {cert.issuer}
+                      </span>
+                      <span className="text-muted-foreground text-xs">·</span>
+                      <span className="text-xs text-muted-foreground">{cert.platform}</span>
+                    </div>
+
+                    {/* Description */}
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-4 flex-1">
+                      {cert.description}
+                    </p>
+
+                    {/* Skills */}
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {cert.skills.map((skill) => (
+                        <Badge
+                          key={skill}
+                          variant="secondary"
+                          className={`text-xs bg-gradient-to-r ${cert.gradient} bg-opacity-10 border-0 text-foreground/70`}
+                          style={{ background: 'transparent' }}
+                        >
+                          <span className={`inline-block w-1.5 h-1.5 rounded-full mr-1.5 bg-gradient-to-r ${cert.gradient}`} />
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="pt-3 border-t border-border/30 flex flex-wrap gap-2">
+                      {cert.verifyUrl && (
+                        <a
+                          href={cert.verifyUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-gradient-to-r ${cert.gradient} shadow-sm hover:opacity-90 hover:shadow-md transition-all duration-200`}
+                        >
+                          <BadgeCheck className="w-3.5 h-3.5" />
+                          Verify Certificate
+                        </a>
+                      )}
+                      <a
+                        href={cert.pdfUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-border/60 bg-background/80 hover:bg-background hover:border-border transition-all duration-200 text-foreground/80 hover:text-foreground"
+                      >
+                        <FileText className="w-3.5 h-3.5 text-orange-500" />
+                        View PDF
+                      </a>
+                      <div className="flex items-center gap-1.5 ml-auto text-xs text-muted-foreground">
+                        <Trophy className="w-3 h-3 text-orange-400" />
+                        <span>{cert.credentialId}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Bottom decorative stats strip */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="mt-10 md:mt-12 p-5 md:p-6 rounded-2xl bg-gradient-to-r from-blue-500/8 via-violet-500/8 to-purple-500/8 border border-blue-200/40 dark:border-blue-800/40 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left"
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-gradient-to-br from-blue-500 to-violet-500 shadow-md">
+                <Award className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <p className="font-bold text-base md:text-lg">{certifications.length} Certifications Earned</p>
+                <p className="text-xs text-muted-foreground">From globally recognized platforms</p>
+              </div>
+            </div>
+            <div className="flex flex-wrap justify-center sm:justify-end gap-2">
+              {['Google', 'Coursera', 'MongoDB'].map((org) => (
+                <Badge key={org} variant="outline" className="text-xs border-blue-300/50 dark:border-blue-700/50">
+                  {org}
+                </Badge>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </section>
 
