@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react'
 
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -10,7 +10,7 @@ import { Separator } from '@/components/ui/separator'
 import {
   Mail, Phone, MapPin, Linkedin, Download, Github, ExternalLink, Brain, Rocket,
   Database, Code2, BarChart3, Layers, GraduationCap, Briefcase, Cpu, Zap,
-  FileText, ChevronRight, Globe, ArrowRight, Sparkles, Terminal, Trophy,
+  FileText, ChevronLeft, ChevronRight, Globe, ArrowRight, Sparkles, Terminal, Trophy,
   Target, Flame, Hexagon, User, Award, BadgeCheck
 } from 'lucide-react'
 
@@ -95,24 +95,24 @@ const projects = [
     liveDemo: 'https://github.com/Ranjith01111/aether-system'
   },
   {
-    title: 'CRUD Website',
-    role: 'Full Stack Web Project',
-    subtitle: 'Ticket Booking Web Application',
-    description: 'A full-stack ticket booking web app built with React, TypeScript, and Firebase. Features event discovery, ticket management (create, edit, cancel, delete), QR code e-passes, nearby theater finder, built-in chat support, and secure Firebase Authentication.',
-    icon: Globe,
-    tech: ['React', 'TypeScript', 'Firebase', 'Vite', 'Firestore'],
+    title: 'AI Interview Assistant',
+    role: 'Full-Stack AI Project',
+    subtitle: 'AI-Powered Mock Interview & Scoring System',
+    description: 'An AI-powered mock interview system that analyzes your resume, generates personalized questions using LangChain RetrievalQA, conducts a conversational interview via GPT-4o-mini, and provides real-time scoring and feedback with hiring recommendations.',
+    icon: Brain,
+    tech: ['Python', 'FastAPI', 'LangChain', 'FAISS', 'OpenAI', 'Streamlit'],
     features: [
-      'Ticket Management — create, edit, cancel, delete',
-      'Live event recommendations in Coimbatore',
-      'QR code e-pass for each booking',
-      'Nearby theater finder',
-      'Built-in chat support assistant',
-      'Secure Firebase Authentication'
+      'Resume PDF parsing with FAISS embeddings',
+      'LangChain RetrievalQA question generation',
+      'Real-time AI interview scoring (0-10)',
+      'Conversational interview with memory',
+      'Final assessment with hiring recommendation',
+      '4-step Streamlit wizard UI'
     ],
-    domain: 'Full Stack / Web / Cloud',
-    gradient: 'from-indigo-500 to-blue-500',
+    domain: 'AI / NLP / Full Stack',
+    gradient: 'from-cyan-500 to-blue-600',
     featured: true,
-    liveDemo: 'https://github.com/Ranjith01111/CRUD-Website'
+    liveDemo: 'https://github.com/Ranjith01111/AI-Interview-Assistant'
   },
   {
     title: 'AI Video Generator',
@@ -122,6 +122,15 @@ const projects = [
     tech: ['Python', 'OpenAI API', 'Manim', 'FFmpeg', 'LaTeX', 'Gradio'],
     gradient: 'from-purple-500 to-pink-500',
     liveDemo: 'https://github.com/Ranjith01111/Level-1-Text-to-video-AI-animation_Project'
+  },
+  {
+    title: 'CRUD Website',
+    role: 'Full Stack Web Project',
+    description: 'A full-stack ticket booking web app built with React, TypeScript, and Firebase. Features event discovery, ticket management, QR code e-passes, nearby theater finder, chat support, and secure Firebase Authentication.',
+    icon: Globe,
+    tech: ['React', 'TypeScript', 'Firebase', 'Vite', 'Firestore'],
+    gradient: 'from-indigo-500 to-blue-500',
+    liveDemo: 'https://github.com/Ranjith01111/CRUD-Website'
   },
   {
     title: 'Intelligence Document Summarizer',
@@ -206,6 +215,179 @@ function Video({ size = 24 }: { size?: number }) {
   )
 }
 
+/* ── Book-Flip Carousel for More Projects ── */
+const flipVariants = {
+  enter: (direction: number) => ({
+    rotateY: direction > 0 ? 90 : -90,
+    opacity: 0,
+    scale: 0.95,
+  }),
+  center: {
+    rotateY: 0,
+    opacity: 1,
+    scale: 1,
+    transition: {
+      rotateY: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
+      opacity: { duration: 0.3 },
+      scale: { duration: 0.4 },
+    },
+  },
+  exit: (direction: number) => ({
+    rotateY: direction > 0 ? -90 : 90,
+    opacity: 0,
+    scale: 0.95,
+    transition: {
+      rotateY: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
+      opacity: { duration: 0.3 },
+      scale: { duration: 0.4 },
+    },
+  }),
+}
+
+function MoreProjectsCarousel({ projects }: { projects: typeof import('./page').default extends never ? never : any[] }) {
+  const [[currentPage, direction], setPage] = useState([0, 0])
+  const total = projects.length
+
+  const paginate = (newDirection: number) => {
+    setPage([(currentPage + newDirection + total) % total, newDirection])
+  }
+
+  const goTo = (index: number) => {
+    setPage([index, index > currentPage ? 1 : -1])
+  }
+
+  const project = projects[currentPage]
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2">
+          <div className="p-2 rounded-lg bg-gradient-to-br from-orange-500 to-amber-500 shadow-md">
+            <Terminal className="h-4 w-4 text-white" />
+          </div>
+          <h3 className="text-lg md:text-xl font-bold">More Projects</h3>
+          <Badge variant="secondary" className="ml-2 text-xs bg-orange-100 dark:bg-orange-950/30 text-orange-600 dark:text-orange-400">
+            {currentPage + 1} / {total}
+          </Badge>
+        </div>
+
+        {/* Navigation Arrows */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => paginate(-1)}
+            className="p-2 rounded-xl border border-border/60 bg-background/80 backdrop-blur-sm hover:border-orange-400/60 hover:bg-orange-50 dark:hover:bg-orange-950/20 transition-all duration-200 group"
+            aria-label="Previous project"
+          >
+            <ChevronLeft className="h-5 w-5 text-muted-foreground group-hover:text-orange-500 transition-colors" />
+          </button>
+          <button
+            onClick={() => paginate(1)}
+            className="p-2 rounded-xl border border-border/60 bg-background/80 backdrop-blur-sm hover:border-orange-400/60 hover:bg-orange-50 dark:hover:bg-orange-950/20 transition-all duration-200 group"
+            aria-label="Next project"
+          >
+            <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-orange-500 transition-colors" />
+          </button>
+        </div>
+      </div>
+
+      {/* Flip Container */}
+      <div className="relative" style={{ perspective: '1200px' }}>
+        <div className="min-h-[320px] md:min-h-[280px]">
+          <AnimatePresence mode="wait" custom={direction}>
+            <motion.div
+              key={currentPage}
+              custom={direction}
+              variants={flipVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              style={{ transformStyle: 'preserve-3d', backfaceVisibility: 'hidden' }}
+            >
+              <Card className="border border-border/60 bg-background/80 backdrop-blur-sm overflow-hidden group hover:shadow-xl hover:border-orange-300/60 dark:hover:border-orange-700/60 transition-all duration-300 relative">
+                {/* Top accent */}
+                <div className={`h-1 w-full bg-gradient-to-r ${project.gradient}`} />
+
+                <div className="flex flex-col md:flex-row">
+                  {/* Left side - Icon + Title */}
+                  <div className="p-5 md:p-8 md:w-2/5 md:border-r border-border/30 flex flex-col justify-center">
+                    <div className="flex items-center gap-3 mb-3">
+                      <motion.div
+                        whileHover={{ rotate: 360, scale: 1.1 }}
+                        transition={{ duration: 0.6 }}
+                        className={`p-3 rounded-xl bg-gradient-to-br ${project.gradient} shadow-lg flex-shrink-0`}
+                      >
+                        <project.icon className="h-6 w-6 text-white" />
+                      </motion.div>
+                      <div>
+                        <h4 className="text-lg md:text-xl font-bold leading-tight">{project.title}</h4>
+                        <p className={`text-xs md:text-sm font-medium ${project.gradient.includes('purple') ? 'text-purple-600 dark:text-purple-400' : 'text-orange-600 dark:text-orange-400'}`}>
+                          {project.role}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Tech stack */}
+                    <div className="flex flex-wrap gap-1.5 mt-3">
+                      {project.tech.map((tech: string) => (
+                        <Badge key={tech} variant="secondary" className="text-xs bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-violet-950/20">
+                          {tech}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right side - Description + Link */}
+                  <div className="p-5 md:p-8 md:w-3/5 flex flex-col justify-center">
+                    <p className="text-sm md:text-base text-muted-foreground mb-5 leading-relaxed">
+                      {project.description}
+                    </p>
+
+                    {project.liveDemo && (
+                      <div>
+                        <a
+                          href={project.liveDemo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white bg-gradient-to-r ${project.gradient} shadow-md hover:opacity-90 hover:shadow-lg transition-all duration-200`}
+                        >
+                          <Github className="h-4 w-4" />
+                          GitHub Repo
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
+
+      {/* Dot Indicators */}
+      <div className="flex items-center justify-center gap-2 mt-6">
+        {projects.map((_: any, index: number) => (
+          <button
+            key={index}
+            onClick={() => goTo(index)}
+            className={`transition-all duration-300 rounded-full ${
+              index === currentPage
+                ? 'w-8 h-2.5 bg-gradient-to-r from-orange-500 to-amber-500 shadow-md shadow-orange-500/30'
+                : 'w-2.5 h-2.5 bg-border hover:bg-orange-400/50'
+            }`}
+            aria-label={`Go to project ${index + 1}`}
+          />
+        ))}
+      </div>
+    </motion.div>
+  )
+}
+
 export default function Portfolio() {
   const [introComplete, setIntroComplete] = useState(false)
   const handleIntroComplete = useCallback(() => setIntroComplete(true), [])
@@ -220,7 +402,7 @@ export default function Portfolio() {
       <SubtleBackground />
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-40 bg-background/70 backdrop-blur-2xl border-b border-border/40">
+      <nav className="relative top-0 left-0 right-0 z-40 bg-background/70 backdrop-blur-2xl border-b border-border/40">
         <div className="container mx-auto px-4 py-4 flex items-center">
           {/* Left — Logo */}
           <div className="flex-1">
@@ -256,31 +438,31 @@ export default function Portfolio() {
               animate={{ opacity: 1, x: 0 }}
               className="flex gap-3"
             >
-              <MagneticButton asChild variant="ghost" size="sm" className="hover:bg-orange-50 dark:hover:bg-orange-950/20">
+              <Button asChild variant="ghost" size="sm" className="hover:bg-orange-50 dark:hover:bg-orange-950/20">
                 <a href="https://www.linkedin.com/in/ranjithv1111" target="_blank" rel="noopener noreferrer">
                   <Linkedin className="h-4 w-4 sm:mr-2" />
                   <span className="hidden sm:inline">LinkedIn</span>
                 </a>
-              </MagneticButton>
-              <MagneticButton asChild variant="ghost" size="sm" className="hover:bg-orange-50 dark:hover:bg-orange-950/20">
+              </Button>
+              <Button asChild variant="ghost" size="sm" className="hover:bg-orange-50 dark:hover:bg-orange-950/20">
                 <a href="https://github.com/Ranjith01111" target="_blank" rel="noopener noreferrer">
                   <Github className="h-4 w-4 sm:mr-2" />
                   <span className="hidden sm:inline">GitHub</span>
                 </a>
-              </MagneticButton>
-              <MagneticButton asChild variant="ghost" size="sm" className="hover:bg-orange-50 dark:hover:bg-orange-950/20">
+              </Button>
+              <Button asChild variant="ghost" size="sm" className="hover:bg-orange-50 dark:hover:bg-orange-950/20">
                 <a href="#about-me">
                   <User className="h-4 w-4 sm:mr-2" />
                   <span className="hidden sm:inline">About Me</span>
                 </a>
-              </MagneticButton>
+              </Button>
             </motion.div>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center pt-20 px-4 overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
         <div className="absolute inset-0">
           <motion.div
             className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br from-orange-500/20 to-amber-500/20 rounded-full blur-3xl"
@@ -378,7 +560,7 @@ export default function Portfolio() {
                   Get In Touch
                 </a>
                 <Button asChild size="lg" variant="outline" className="border-2 border-orange-300 dark:border-orange-700 hover:bg-orange-50 dark:hover:bg-orange-950/20 px-6 sm:px-8">
-                  <a href="/upload/Resume%20of%20Ranjith-1.pdf" target="_blank" rel="noopener noreferrer">
+                  <a href="/upload/Ranjith%20V%20Resume.pdf" target="_blank" rel="noopener noreferrer">
                     <FileText className="mr-2 h-5 w-5" />
                     View Resume
                   </a>
@@ -781,74 +963,8 @@ export default function Portfolio() {
             ))}
           </div>
 
-          {/* Other Projects - Clean Grid */}
-          <div>
-            <motion.h3
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="text-lg md:text-xl font-bold text-muted-foreground mb-4 md:mb-6 flex items-center gap-2"
-            >
-              <Terminal className="h-5 w-5 text-orange-500" />
-              More Projects
-            </motion.h3>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-              {projects.filter(p => !p.featured).map((project, index) => (
-                <motion.div
-                  key={project.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-60px' }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                >
-                  <Card className="h-full border border-border/60 hover:border-orange-300/60 dark:hover:border-orange-700/60 bg-background/80 backdrop-blur-sm overflow-hidden group hover:shadow-xl transition-all duration-300 relative">
-                    {/* Top accent */}
-                    <div className={`h-0.5 w-full bg-gradient-to-r ${project.gradient}`} />
-
-                    <div className="relative h-full flex flex-col p-4 md:p-6">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className={`p-2.5 rounded-xl bg-gradient-to-br ${project.gradient} shadow-md flex-shrink-0 group-hover:scale-110 transition-transform`}>
-                          <project.icon className="h-5 w-5 text-white" />
-                        </div>
-                        <div>
-                          <h4 className="text-base md:text-lg font-bold leading-tight">{project.title}</h4>
-                          <p className={`text-xs font-medium ${project.gradient.includes('purple') ? 'text-purple-600 dark:text-purple-400' : 'text-orange-600 dark:text-orange-400'}`}>
-                            {project.role}
-                          </p>
-                        </div>
-                      </div>
-
-                      <p className="text-xs md:text-sm text-muted-foreground mb-4 leading-relaxed flex-1">
-                        {project.description}
-                      </p>
-
-                      <div className="flex flex-wrap gap-1.5">
-                        {project.tech.map((tech) => (
-                          <Badge key={tech} variant="secondary" className="text-xs bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-violet-950/20">
-                            {tech}
-                          </Badge>
-                        ))}
-                      </div>
-
-                      {project.liveDemo && (
-                        <div className="mt-4">
-                          <a
-                            href={project.liveDemo}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white bg-gradient-to-r ${project.gradient} shadow-md hover:opacity-90 hover:shadow-lg transition-all duration-200`}
-                          >
-                            <Github className="h-4 w-4" />
-                            GitHub Repo
-                          </a>
-                        </div>
-                      )}
-                    </div>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          </div>
+          {/* Other Projects - Book Flip Carousel */}
+          <MoreProjectsCarousel projects={projects.filter(p => !p.featured)} />
         </div>
       </section>
 
@@ -1483,7 +1599,7 @@ export default function Portfolio() {
                   </a>
                 </MagneticButton>
                 <MagneticButton asChild variant="ghost" size="sm" className="hover:bg-orange-50 dark:hover:bg-orange-950/20">
-                  <a href="/upload/Resume%20of%20Ranjith-1.pdf" target="_blank" rel="noopener noreferrer" title="View Resume">
+                  <a href="/upload/Ranjith%20V%20Resume.pdf" target="_blank" rel="noopener noreferrer" title="View Resume">
                     <FileText className="h-5 w-5" />
                   </a>
                 </MagneticButton>
