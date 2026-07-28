@@ -167,6 +167,20 @@ const certifications = [
     color: 'blue'
   },
   {
+    title: 'Snowflake Certification',
+    issuer: 'Snowflake',
+    platform: 'Snowflake',
+    date: '2025',
+    credentialId: 'Snowflake',
+    description: 'Demonstrated proficiency in the Snowflake cloud data platform, including data warehousing, data engineering, and data architecture.',
+    skills: ['Snowflake', 'Cloud Data Warehouse', 'Data Engineering', 'SQL'],
+    gradient: 'from-sky-400 to-blue-600',
+    icon: '❄️',
+    verifyUrl: null,
+    pdfUrl: '/upload/snowflake-certificate.pdf',
+    color: 'sky'
+  },
+  {
     title: 'Introduction to Vector Search',
     issuer: 'MongoDB',
     platform: 'MongoDB University',
@@ -1000,119 +1014,124 @@ export default function Portfolio() {
             </p>
           </motion.div>
 
-          {/* Certification Cards Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-            {certifications.map((cert, index) => (
-              <motion.div
-                key={cert.title}
-                initial={{ opacity: 0, y: 40, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: '-60px' }}
-                transition={{ delay: index * 0.12, duration: 0.55, ease: 'easeOut' }}
-                whileHover={{ y: -6 }}
-                className="group cursor-default"
-              >
-                <div className="relative h-full rounded-2xl border border-border/40 bg-background/70 backdrop-blur-md overflow-hidden transition-all duration-300 group-hover:border-blue-300/50 dark:group-hover:border-blue-700/50 group-hover:shadow-2xl"
-                  style={{ boxShadow: '0 4px 30px rgba(99,102,241,0.06)' }}
+          {/* Certification Cards Marquee */}
+          <div 
+            className="relative w-full overflow-hidden flex py-4 md:py-8" 
+            style={{ maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)' }}
+          >
+            <motion.div
+              className="flex gap-5 md:gap-6 w-max"
+              animate={{ x: ["-50%", "0%"] }}
+              transition={{ repeat: Infinity, ease: "linear", duration: 35 }}
+            >
+              {[...certifications, ...certifications, ...certifications, ...certifications].map((cert, index) => (
+                <div
+                  key={`${cert.title}-${index}`}
+                  className="group cursor-default w-[300px] sm:w-[350px] md:w-[400px] flex-shrink-0 transition-transform duration-300 hover:-translate-y-2 hover:scale-[1.02]"
                 >
-                  {/* Top gradient accent bar */}
-                  <div className={`h-1 w-full bg-gradient-to-r ${cert.gradient}`} />
+                  <div className="relative h-full rounded-2xl border border-border/40 bg-background/70 backdrop-blur-md overflow-hidden transition-all duration-300 group-hover:border-blue-300/50 dark:group-hover:border-blue-700/50 group-hover:shadow-2xl"
+                    style={{ boxShadow: '0 4px 30px rgba(99,102,241,0.06)' }}
+                  >
+                    {/* Top gradient accent bar */}
+                    <div className={`h-1 w-full bg-gradient-to-r ${cert.gradient}`} />
 
-                  {/* Shimmer overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/[0.03] to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                    {/* Shimmer overlay on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/[0.03] to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
-                  {/* Glow blob behind card */}
-                  <motion.div
-                    className={`absolute -top-8 -right-8 w-32 h-32 bg-gradient-to-br ${cert.gradient} opacity-10 rounded-full blur-2xl`}
-                    animate={{ scale: [1, 1.15, 1], opacity: [0.08, 0.15, 0.08] }}
-                    transition={{ duration: 4 + index, repeat: Infinity, ease: 'easeInOut' }}
-                  />
+                    {/* Glow blob behind card */}
+                    <motion.div
+                      className={`absolute -top-8 -right-8 w-32 h-32 bg-gradient-to-br ${cert.gradient} opacity-10 rounded-full blur-2xl`}
+                      animate={{ scale: [1, 1.15, 1], opacity: [0.08, 0.15, 0.08] }}
+                      transition={{ duration: 4 + (index % 4), repeat: Infinity, ease: 'easeInOut' }}
+                    />
 
-                  <div className="relative p-6 md:p-7 flex flex-col h-full">
-                    {/* Header row — icon + issuer badge */}
-                    <div className="flex items-start justify-between mb-4">
-                      <motion.div
-                        whileHover={{ rotate: 12, scale: 1.1 }}
-                        transition={{ type: 'spring', stiffness: 300 }}
-                        className={`w-12 h-12 rounded-xl bg-gradient-to-br ${cert.gradient} shadow-lg flex items-center justify-center text-2xl flex-shrink-0`}
-                      >
-                        {cert.icon}
-                      </motion.div>
-
-                      <div className="flex flex-col items-end gap-1">
-                        <Badge className={`bg-gradient-to-r ${cert.gradient} text-white border-0 text-xs px-2.5 py-1`}>
-                          <BadgeCheck className="w-3 h-3 mr-1" />
-                          Verified
-                        </Badge>
-                        <span className="text-xs text-muted-foreground">{cert.date}</span>
-                      </div>
-                    </div>
-
-                    {/* Title & Issuer */}
-                    <h3 className="text-lg md:text-xl font-bold mb-1 leading-tight">{cert.title}</h3>
-                    <div className="flex items-center gap-1.5 mb-3">
-                      <span className={`text-sm font-semibold ${
-                        cert.color === 'blue' ? 'text-blue-600 dark:text-blue-400'
-                        : cert.color === 'green' ? 'text-emerald-600 dark:text-emerald-400'
-                        : 'text-violet-600 dark:text-violet-400'
-                      }`}>
-                        {cert.issuer}
-                      </span>
-                      <span className="text-muted-foreground text-xs">·</span>
-                      <span className="text-xs text-muted-foreground">{cert.platform}</span>
-                    </div>
-
-                    {/* Description */}
-                    <p className="text-sm text-muted-foreground leading-relaxed mb-4 flex-1">
-                      {cert.description}
-                    </p>
-
-                    {/* Skills */}
-                    <div className="flex flex-wrap gap-1.5 mb-4">
-                      {cert.skills.map((skill) => (
-                        <Badge
-                          key={skill}
-                          variant="secondary"
-                          className={`text-xs bg-gradient-to-r ${cert.gradient} bg-opacity-10 border-0 text-foreground/70`}
-                          style={{ background: 'transparent' }}
+                    <div className="relative p-6 md:p-7 flex flex-col h-full">
+                      {/* Header row — icon + issuer badge */}
+                      <div className="flex items-start justify-between mb-4">
+                        <motion.div
+                          whileHover={{ rotate: 12, scale: 1.1 }}
+                          transition={{ type: 'spring', stiffness: 300 }}
+                          className={`w-12 h-12 rounded-xl bg-gradient-to-br ${cert.gradient} shadow-lg flex items-center justify-center text-2xl flex-shrink-0`}
                         >
-                          <span className={`inline-block w-1.5 h-1.5 rounded-full mr-1.5 bg-gradient-to-r ${cert.gradient}`} />
-                          {skill}
-                        </Badge>
-                      ))}
-                    </div>
+                          {cert.icon}
+                        </motion.div>
 
-                    {/* Action Buttons */}
-                    <div className="pt-3 border-t border-border/30 flex flex-wrap gap-2">
-                      {cert.verifyUrl && (
+                        <div className="flex flex-col items-end gap-1">
+                          <Badge className={`bg-gradient-to-r ${cert.gradient} text-white border-0 text-xs px-2.5 py-1`}>
+                            <BadgeCheck className="w-3 h-3 mr-1" />
+                            Verified
+                          </Badge>
+                          <span className="text-xs text-muted-foreground">{cert.date}</span>
+                        </div>
+                      </div>
+
+                      {/* Title & Issuer */}
+                      <h3 className="text-lg md:text-xl font-bold mb-1 leading-tight">{cert.title}</h3>
+                      <div className="flex items-center gap-1.5 mb-3">
+                        <span className={`text-sm font-semibold ${
+                          cert.color === 'blue' ? 'text-blue-600 dark:text-blue-400'
+                          : cert.color === 'green' ? 'text-emerald-600 dark:text-emerald-400'
+                          : cert.color === 'sky' ? 'text-sky-600 dark:text-sky-400'
+                          : 'text-violet-600 dark:text-violet-400'
+                        }`}>
+                          {cert.issuer}
+                        </span>
+                        <span className="text-muted-foreground text-xs">·</span>
+                        <span className="text-xs text-muted-foreground">{cert.platform}</span>
+                      </div>
+
+                      {/* Description */}
+                      <p className="text-sm text-muted-foreground leading-relaxed mb-4 flex-1">
+                        {cert.description}
+                      </p>
+
+                      {/* Skills */}
+                      <div className="flex flex-wrap gap-1.5 mb-4">
+                        {cert.skills.map((skill) => (
+                          <Badge
+                            key={skill}
+                            variant="secondary"
+                            className={`text-xs bg-gradient-to-r ${cert.gradient} bg-opacity-10 border-0 text-foreground/70`}
+                            style={{ background: 'transparent' }}
+                          >
+                            <span className={`inline-block w-1.5 h-1.5 rounded-full mr-1.5 bg-gradient-to-r ${cert.gradient}`} />
+                            {skill}
+                          </Badge>
+                        ))}
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="pt-3 border-t border-border/30 flex flex-wrap gap-2">
+                        {cert.verifyUrl && (
+                          <a
+                            href={cert.verifyUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-gradient-to-r ${cert.gradient} shadow-sm hover:opacity-90 hover:shadow-md transition-all duration-200`}
+                          >
+                            <BadgeCheck className="w-3.5 h-3.5" />
+                            Verify Certificate
+                          </a>
+                        )}
                         <a
-                          href={cert.verifyUrl}
+                          href={cert.pdfUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-gradient-to-r ${cert.gradient} shadow-sm hover:opacity-90 hover:shadow-md transition-all duration-200`}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-border/60 bg-background/80 hover:bg-background hover:border-border transition-all duration-200 text-foreground/80 hover:text-foreground"
                         >
-                          <BadgeCheck className="w-3.5 h-3.5" />
-                          Verify Certificate
+                          <FileText className="w-3.5 h-3.5 text-orange-500" />
+                          View PDF
                         </a>
-                      )}
-                      <a
-                        href={cert.pdfUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-border/60 bg-background/80 hover:bg-background hover:border-border transition-all duration-200 text-foreground/80 hover:text-foreground"
-                      >
-                        <FileText className="w-3.5 h-3.5 text-orange-500" />
-                        View PDF
-                      </a>
-                      <div className="flex items-center gap-1.5 ml-auto text-xs text-muted-foreground">
-                        <Trophy className="w-3 h-3 text-orange-400" />
-                        <span>{cert.credentialId}</span>
+                        <div className="flex items-center gap-1.5 ml-auto text-xs text-muted-foreground">
+                          <Trophy className="w-3 h-3 text-orange-400" />
+                          <span>{cert.credentialId}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </motion.div>
-            ))}
+              ))}
+            </motion.div>
           </div>
 
           {/* Bottom decorative stats strip */}
